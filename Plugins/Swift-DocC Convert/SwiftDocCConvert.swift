@@ -53,7 +53,7 @@ import PackagePlugin
             workingDirectory: URL(fileURLWithPath: context.pluginWorkDirectory.string, isDirectory: true)
         )
 #else
-        let snippetExtractor: SnippetBuilder? = nil
+        let snippetExtractor: SnippetExtractor? = nil
 #endif
         
         
@@ -70,7 +70,8 @@ import PackagePlugin
                 for: target,
                 context: context,
                 verbose: verbose,
-                snippetExtractor: snippetExtractor
+                snippetExtractor: snippetExtractor,
+                arguments: parsedArguments.dumpSymbolGraphArguments()
             )
             
             if try FileManager.default.contentsOfDirectory(atPath: symbolGraphs.targetSymbolGraphsDirectory.path).isEmpty {

@@ -442,4 +442,33 @@ final class ParsedArgumentsTests: XCTestCase {
             ]
         )
     }
+    
+    func testDocCArgumentsWithDumpSymbolGraphArguments() {
+        let dumpSymbolGraphArguments = ParsedArguments(["--exclude-extended-types"])
+        
+        let doccArguments = dumpSymbolGraphArguments.doccArguments(
+            action: .convert,
+            targetKind: .executable,
+            doccCatalogPath: "/my/catalog.docc",
+            targetName: "MyTarget",
+            symbolGraphDirectoryPath: "/my/symbol-graph",
+            outputPath: "/my/output-path"
+        )
+        
+        XCTAssertFalse(doccArguments.contains("--exclude-extended-types"))
+        XCTAssertFalse(doccArguments.contains("--omit-extension-block-symbols"))
+    }
+    
+    func testDumpSymbolGraphArguments() {
+        let dumpSymbolGraphArguments = ParsedArguments(["--exclude-extended-types"])
+        
+        XCTAssertEqual(dumpSymbolGraphArguments.dumpSymbolGraphArguments(), ["--omit-extension-block-symbols"])
+    }
+    
+    func testDumpSymbolGraphArgumentsWithDocCArguments() {
+        let dumpSymbolGraphArguments = ParsedArguments(["--fallback-default-module-kind", "Executable"])
+        
+        
+        XCTAssertTrue(dumpSymbolGraphArguments.dumpSymbolGraphArguments().isEmpty)
+    }
 }
